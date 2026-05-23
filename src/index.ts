@@ -1,42 +1,27 @@
-const CONSONANTS = "bcdfghjklmnpqrstvwxz"
 const ROBBER_CONSONANTS = "bcdfghjklmnpqrstvwz"
+const ALL_CONSONANTS = `${ROBBER_CONSONANTS}x`
 
 const TRIO_ALTERNATION = ROBBER_CONSONANTS.split("")
 	.map((c) => `[${c.toUpperCase()}${c}]o${c}`)
 	.join("|")
 
-const NON_CONSONANT_CLASS = `[^${CONSONANTS}${CONSONANTS.toUpperCase()}]`
+const NON_CONSONANT_CLASS = `[^${ALL_CONSONANTS}${ALL_CONSONANTS.toUpperCase()}]`
 
 export const pattern = new RegExp(
 	`^(?:${TRIO_ALTERNATION}|${NON_CONSONANT_CLASS})*$`,
 )
 
-const TRIO_REGEX = new RegExp(TRIO_ALTERNATION, "g")
-
-function isConsonant(letter: string): boolean {
-	return CONSONANTS.includes(letter.toLowerCase())
-}
-
-function isUpperCase(letter: string): boolean {
-	return letter === letter.toUpperCase()
-}
-
-function consonantToRobber(letter: string): string {
-	if (letter.toLowerCase() === "x") {
-		const k = isUpperCase(letter) ? "K" : "k"
-		return `${k}oksos`
-	}
-	return `${letter}o${letter.toLowerCase()}`
-}
+const X_PATTERN = /x/gi
+const CONSONANT_PATTERN = new RegExp(`[${ROBBER_CONSONANTS}]`, "gi")
+const TRIO_PATTERN = new RegExp(TRIO_ALTERNATION, "g")
 
 export function toRobber(text: string): string {
 	if (typeof text !== "string") {
 		throw new Error(`input needs to be of type string, got ${typeof text}`)
 	}
 	return text
-		.split("")
-		.map((letter) => (isConsonant(letter) ? consonantToRobber(letter) : letter))
-		.join("")
+		.replace(X_PATTERN, (m) => (m === "X" ? "Ks" : "ks"))
+		.replace(CONSONANT_PATTERN, (c) => `${c}o${c.toLowerCase()}`)
 }
 
 export function fromRobber(robber: string): string {
@@ -46,5 +31,5 @@ export function fromRobber(robber: string): string {
 	if (!pattern.test(robber)) {
 		throw new Error("input is not a valid robber language string")
 	}
-	return robber.replace(TRIO_REGEX, (match) => match.charAt(0))
+	return robber.replace(TRIO_PATTERN, (match) => match.charAt(0))
 }

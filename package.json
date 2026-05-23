@@ -1,6 +1,6 @@
 {
 	"name": "@tammergard/robber",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Convert to and from robber language (rövarspråket)",
 	"keywords": [
 		"robber",

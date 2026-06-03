@@ -1,5 +1,11 @@
 # @tammergard/robber
 
+## 1.0.2
+
+### Patch Changes
+
+- 9b76737: Use `devEngines` instead of `engines` for the Node version requirement, so it applies to development only and no longer constrains consumers of the package.
+
 ## 1.0.1
 
 ### Patch Changes
